@@ -13,7 +13,7 @@ struct ContentView: View {
         Button("Количество нажатий: \(counter)") {
             counter += 1
         }
-        .sensoryFeedback(.increase, trigger: counter)
+        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: counter)
     }
  }
 
