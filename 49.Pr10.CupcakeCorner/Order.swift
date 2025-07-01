@@ -39,7 +39,22 @@ class Order: Codable {
     
     //данные получателя (в случае оформления доставки)
     var name = ""
-    var streetAddress = ""
+    var streetAddress = "" {
+        didSet {
+            if let encoded = try? JSONEncoder().encode(streetAddress) {
+                UserDefaults.standard.set(encoded, forKey: "streetAddress")
+            }
+        }
+    }
+    
+    init() {
+        if let savedAddress = UserDefaults.standard.data(forKey: "streetAddress") {
+            if let decodedAddress = try? JSONDecoder().decode(String.self, from: savedAddress) {
+                streetAddress = decodedAddress
+            }
+        }
+    }
+    
     var city = ""
     var zip = ""                        //индекс
     
