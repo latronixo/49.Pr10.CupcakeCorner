@@ -38,4 +38,24 @@ class Order {
         
         return true
     }
+    
+    var cost: Decimal {
+        // $2 за пирожное
+        var cost = Decimal(quantity * 2)
+        
+        //каждый последующий тип пирожного (в массиве) стоит дороже
+        cost += Decimal(type) / 2
+        
+        //за доп.глазурь $1
+        if extraFrosting {
+            cost += Decimal(quantity)
+        }
+        
+        //за посыпку 50 центов
+        if addSprinkles {
+            cost += Decimal(quantity) / 2
+        }
+        
+        return cost
+    }
 }
