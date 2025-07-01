@@ -44,11 +44,13 @@ class Order: Codable {
     var zip = ""                        //индекс
     
     var hasValidAddress: Bool {
-        if name.isEmpty || streetAddress.isEmpty || city.isEmpty || zip.isEmpty {
-            return false
-        }
+        //Проверяем, не являются ли строки пустыми или состоящими только из пробелов
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedStreetAddress = streetAddress.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedCity = city.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedZip = zip.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        return true
+        return !trimmedName.isEmpty && !trimmedStreetAddress.isEmpty && !trimmedCity.isEmpty && !trimmedZip.isEmpty
     }
     
     var cost: Decimal {
