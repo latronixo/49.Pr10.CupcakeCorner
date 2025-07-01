@@ -24,4 +24,18 @@ class Order {
     }
     var extraFrosting = false           //дополнительная глазурь
     var addSprinkles = false            //добавьте посыпку
+    
+    //данные получателя (в случае оформления доставки)
+    var name = ""
+    var streetAddress = ""
+    var city = ""
+    var zip = ""                        //индекс
+    
+    var hasValidAddress: Bool {
+        if name.isEmpty || streetAddress.isEmpty || city.isEmpty || zip.isEmpty {
+            return false
+        }
+        
+        return true
+    }
 }
