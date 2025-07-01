@@ -10,8 +10,13 @@ import SwiftUI
 struct CheckoutView: View {
     var order: Order
     
+    //переменные для алерта с подтверждением успешного оформления заказа
     @State private var confirmationMessage = ""
     @State private var showingConfirmation = false
+    
+    //перменные для алерта при неудачной попытке оформления заказа
+    @State private var showingError = false
+    @State private var errorMessage = ""
     
     var body: some View {
         ScrollView {
@@ -45,6 +50,11 @@ struct CheckoutView: View {
         } message: {
             Text(confirmationMessage)
         }
+        .alert("Ошибка обмена информацией с сервером", isPresented: $showingError) {
+            Button("OK") { }
+        } message: {
+            Text(errorMessage)
+        }
     }
     
     func placeOrder() async {
@@ -58,7 +68,7 @@ struct CheckoutView: View {
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("reqres-free-v1", forHTTPHeaderField: "x-api-key") // Добавляем API ключ
-        request.httpMethod = "POST" //для отправки данных лучше использовать метод POST, чем GET
+        //request.httpMethod = "POST" //для отправки данных лучше использовать метод POST, чем GET
         
         do {
             let (data, _) = try await URLSession.shared.upload(for: request, from: encoded)
@@ -72,8 +82,8 @@ struct CheckoutView: View {
             confirmationMessage = "Your order for \(decodedOrder.quantity)x \(Order.types[decodedOrder.type].lowercased()) cupcakes is on its way!"
             showingConfirmation = true  //покажем алерт с сообщением "Thank you!"
         } catch {
-            print("Check out failed: \(error.localizedDescription)")
-            print("Full error: \(error)")
+            errorMessage = "Ошибка при оформлении заказа: \(error.localizedDescription)"
+            showingError = true
         }
     }
 }
